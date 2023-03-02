@@ -1,0 +1,16 @@
+#container {
+  flex-direction: row;
+  display: flex;
+}
+
+.operations-container {
+  flex-direction: column;
+  display: flex;
+}
+
+.item-container {
+  border: 2px solid red;
+  display: flex;
+}
+
+/*# sourceMappingURL=index.9e4c6fd2.css.map */
