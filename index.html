@@ -13,17 +13,16 @@
     <div class="operations-container">
         <div class="coins-title">Coins:</div>
         <div class="coins-container">
-            <div class="coin">5¢</div>
-            <div class="coin">10¢</div>
-            <div class="coin">25¢</div>
-            <div class="coin">50¢</div>
-            <div class="coin">$1</div>
+            <div class="coin" data-value="5" data-currency="cent">5¢</div>
+            <div class="coin" data-value="10" data-currency="cent">10¢</div>
+            <div class="coin" data-value="25" data-currency="cent">25¢</div>
+            <div class="coin" data-value="50" data-currency="cent">50¢</div>
+            <div class="coin" data-value="1" data-currency="dollar">$1</div>
         </div>
-        <div class="money-avb-title">Money available:</div>
-        <div class="money-avb-total">$1.85</div>
+        <div class="money-avb-title" id="current-money">Money available:</div>
         <button class="submit-btn">Get your money and selected item</button>
     </div>
 </div>
 </body>
-<script src="index.ts"></script>
+<script src="index.ts" type="module"></script>
 </html>
