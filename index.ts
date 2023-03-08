@@ -1,40 +1,5 @@
-const items = [{
-    name: "Coca cola",
-    number: 1,
-    count: 3,
-    price: "1.20",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}, {
-    name: "Pepsi",
-    number: 2,
-    count: 3,
-    price: "2.40",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}, {
-    name: "M & M",
-    number: 3,
-    count: 5,
-    price: "3.23",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}, {
-    name: "Chocolate",
-    number: 3,
-    count: 2,
-    price: "4.33",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}, {
-    name: "Crackers",
-    number: 4,
-    count: 5,
-    price: "6.23",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}, {
-    name: "Bonibon",
-    number: 6,
-    count: 2,
-    price: "6.09",
-    src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRse0PuqzmE6ba20JqXwH4zJ1lVri9G1R3a_tAg6Sk&s"
-}];
+import {items} from "./data";
+
 interface Item {
     name: string
     number: number
@@ -61,29 +26,61 @@ const render = () => {
     const $itemContainer = document.getElementById("item-container");
     const coins = Array.from(document.getElementsByClassName("coin"));
     const currentMoney = document.getElementById("current-money");
+    const submitBtn = document.getElementById("submit-btn");
     let sum = 0;
 
-    const selectItem = (item) => {
-        const currSum = (sum > 100 ? (sum / 100) : sum);
-        const currPrice = parseFloat(item.price);
-        if (currSum > currPrice) {
-            sum = currSum - currPrice;
-            currentMoney.textContent = `Money available: ${formatMoney()}`;
+    submitBtn.addEventListener("click", () => {
+        sum = 0;
+        submitBtn.setAttribute("data-isItemAvailable", "false");
+        currentMoney.textContent = `Money available: ${formatMoney()}`;
+        (submitBtn as HTMLButtonElement).disabled = true
+    });
+
+    const selectItem = (itemInfoElement, item) => {
+        const isItemAvailable = submitBtn.getAttribute("data-isItemAvailable");
+        if (isItemAvailable === "true") {
+            alert("One item at a time!");
+        } else  {
+            const count = (itemInfoElement.getAttribute("count") || item.count) - 1;
+            console.log("count", count);
+            if (count > 0) {
+                itemInfoElement.setAttribute("count", count);
+                itemInfoElement.textContent = `Available Items: ${count}`;
+                const currSum = (sum > 100 ? (sum / 100) : sum);
+                const currPrice = parseFloat(item.price);
+                if (currSum > currPrice) {
+                    sum = currSum - currPrice;
+                    currentMoney.textContent = `Money available: ${formatMoney()}`;
+                    if (isItemAvailable === "false") {
+                        submitBtn.setAttribute("data-isItemAvailable", "true");
+                    }
+                } else {
+                    alert("It looks like you don't have enough money. Insert some coins.")
+                }
+            } else if (count === 0) {
+                itemInfoElement.textContent = `Out of stock`;
+                itemInfoElement.classList.remove("stock-count");
+                itemInfoElement.classList.add("out-of-stock");
+            }
         }
     };
 
     const formatMoney = () => {
-        const result = (sum > 100 ? sum / 100 : sum).toLocaleString("en-US", {style:"currency", currency:"USD"});
+        const result = (sum >= 100 ? sum / 100 : sum).toLocaleString("en-US", {style:"currency", currency:"USD"});
         return result;
     }
 
     for (const coin of coins) {
         coin.addEventListener("click", () => {
-            const value = +coin.getAttribute("data-value");
-            const currency = coin.getAttribute("data-currency");
-            sum += currency === "cent" ? value : (value * 100);
-            console.log("sum", sum);
-            currentMoney.textContent = `Money available: ${formatMoney()}`;
+            const isItemAvailable = submitBtn.getAttribute("data-isItemAvailable");
+            if (isItemAvailable === "true") {
+                alert("one item at a time. Make a purchase please !");
+            } else {
+                const value = +coin.getAttribute("data-value");
+                sum += value;
+                (submitBtn as HTMLButtonElement).disabled = false
+                currentMoney.textContent = `Money available: ${formatMoney()}`;
+            }
         })
     }
     let groupedItems = groupByLength(items, 3);
@@ -101,10 +98,11 @@ const render = () => {
             const priceElement = document.createElement("div");
 
             itemElement.classList.add("item");
-            itemElement.onclick = (event) => selectItem(value);
             itemInfoElement.classList.add("stock-count");
             itemInfoElement.classList.add("item-info");
+            itemInfoElement.id = "item-info";
             itemInfoElement.textContent = `Available Items: ${value.count}`
+            itemElement.onclick = (event) => selectItem(itemInfoElement, value);
             imageElement.classList.add("image");
             imageElement.src = value.src;
             nameElement.classList.add("name");

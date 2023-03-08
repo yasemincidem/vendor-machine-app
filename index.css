@@ -24,6 +24,7 @@
     margin-bottom: 10px;
 }
 .item {
+    width: 200px;
     padding: 2px;
 }
 .item-info {
@@ -45,6 +46,9 @@
     display: block;
     margin-right: auto;
     margin-left: auto;
+    width: 150px;
+    height: 150px;
+    padding: 20px;
 }
 .operations-container {
     justify-content: center;
@@ -101,4 +105,12 @@
     background-color: #5cb85c;
     border: none;
     margin-top: 10px;
+}
+.submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+.out-of-stock {
+    background-color: #f2dede;
+    color: #a94442;
 }
