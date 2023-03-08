@@ -28,12 +28,25 @@ const render = () => {
     const currentMoney = document.getElementById("current-money");
     const submitBtn = document.getElementById("submit-btn");
     let sum = 0;
+    let selectedItem = null;
+    let selectedItemInfoElement = null;
 
     submitBtn.addEventListener("click", () => {
         sum = 0;
         submitBtn.setAttribute("data-isItemAvailable", "false");
         currentMoney.textContent = `Money available: ${formatMoney()}`;
         (submitBtn as HTMLButtonElement).disabled = true
+        const count = (parseInt(selectedItemInfoElement.getAttribute("count")) || selectedItem.count) - 1;
+        if (count > 0) {
+            selectedItemInfoElement.setAttribute("count", count.toString());
+            selectedItemInfoElement.textContent = `Available Items: ${count}`;
+
+        } else if (count === 0) {
+            selectedItemInfoElement.setAttribute("count", "0");
+            selectedItemInfoElement.textContent = `Out of stock`;
+            selectedItemInfoElement.classList.remove("stock-count");
+            selectedItemInfoElement.classList.add("out-of-stock");
+        }
     });
 
     const selectItem = (itemInfoElement, item) => {
@@ -41,11 +54,10 @@ const render = () => {
         if (isItemAvailable === "true") {
             alert("One item at a time!");
         } else  {
-            const count = (itemInfoElement.getAttribute("count") || item.count) - 1;
-            console.log("count", count);
-            if (count > 0) {
-                itemInfoElement.setAttribute("count", count);
-                itemInfoElement.textContent = `Available Items: ${count}`;
+            selectedItemInfoElement = itemInfoElement;
+            selectedItem = item;
+            const countItem = itemInfoElement.getAttribute("count");
+            if (countItem !== "0") {
                 const currSum = (sum > 100 ? (sum / 100) : sum);
                 const currPrice = parseFloat(item.price);
                 if (currSum > currPrice) {
@@ -57,10 +69,8 @@ const render = () => {
                 } else {
                     alert("It looks like you don't have enough money. Insert some coins.")
                 }
-            } else if (count === 0) {
-                itemInfoElement.textContent = `Out of stock`;
-                itemInfoElement.classList.remove("stock-count");
-                itemInfoElement.classList.add("out-of-stock");
+            } else {
+                alert("It is out of stock. Would you like anything else ?")
             }
         }
     };
