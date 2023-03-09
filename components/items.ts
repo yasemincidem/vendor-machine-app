@@ -1,4 +1,5 @@
 import {items} from "../data";
+import Component from "../lib/component";
 
 const groupByLength = (data, size = 3) => {
     let result = [];
@@ -16,12 +17,33 @@ const groupByLength = (data, size = 3) => {
     return result;
 };
 
-export default class Items {
+export default class Items extends Component {
 
-  constructor(public element = document.getElementById("item-container")) {
+  constructor() {
+      super({
+          element: document.getElementById("item-container")
+      })
   }
 
-  render () {
+  selectItem(item, itemInfo) {
+      const submitBtn = document.getElementById("submit-btn");
+      const count = item.getAttribute("data-count");
+      const price = item.getAttribute("data-price");
+      const currentMoney = document.getElementById("current-money");
+      const isItemAvailable = document.getElementById("submit-btn")
+          .getAttribute("data-isItemAvailable");
+
+      const textContent = super.selectItem(item, price, itemInfo, count, isItemAvailable);
+      if (textContent) {
+          currentMoney.textContent = textContent;
+          if (isItemAvailable === "false") {
+              submitBtn.setAttribute("data-isItemAvailable", "true");
+          }
+      }
+      return null;
+  }
+
+    render () {
       let groupedItems = groupByLength(items, 3);
 
       let resultHtml = "";
@@ -33,11 +55,11 @@ export default class Items {
                 const value = groupedItems[i][j];
 
                 innerHtml += `
-                 <div class="item">
+                 <div class="item"data-price=${value.price} data-count=${value.count}>
                      <div class="stock-count item-info" id="item-info">Available Items: ${value.count}</div>
                      <img src=${value.src} class="image">
                      <div class="name item-info">${value.name}</div>
-                     <div class="price item-info">${value.price}</div>
+                     <div class="price item-info" >${value.price}</div>
                  </div>
                 `
             }
@@ -49,7 +71,7 @@ export default class Items {
 
       Array.from(document.getElementsByClassName("item")).forEach((item) => {
         item.addEventListener("click", () => {
-            console.log("clicked");
+            this.selectItem(item, item.firstElementChild);
         })
       })
     };
