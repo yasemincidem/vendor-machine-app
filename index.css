@@ -78,6 +78,7 @@
     font-size: 15px;
     margin: 5px;
     color: white;
+    cursor: pointer;
 }
 .money-avb-title {
     color: black;

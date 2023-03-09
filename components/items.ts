@@ -16,7 +16,7 @@ const groupByLength = (data, size = 3) => {
     return result;
 };
 
-export default class App {
+export default class Items {
 
   constructor(public element = document.getElementById("item-container")) {
   }
@@ -45,6 +45,13 @@ export default class App {
                 <div class="item-container-row">${innerHtml}</div>
             `
         }
-      this.element.innerHTML = resultHtml
+      this.element.innerHTML = resultHtml;
+
+      Array.from(document.getElementsByClassName("item")).forEach((item) => {
+        item.addEventListener("click", () => {
+            console.log("clicked");
+        })
+      })
     };
+
 };

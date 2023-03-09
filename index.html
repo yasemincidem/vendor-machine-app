@@ -8,20 +8,9 @@
 <body>
 <div id="container">
     <div class="title">Vending machine app</div>
-    <div id="item-container">
-    </div>
-    <div class="operations-container">
-        <div class="coins-title">Coins:</div>
-        <div class="coins-container">
-            <div class="coin" data-value="5" data-currency="cent">5¢</div>
-            <div class="coin" data-value="10" data-currency="cent">10¢</div>
-            <div class="coin" data-value="25" data-currency="cent">25¢</div>
-            <div class="coin" data-value="50" data-currency="cent">50¢</div>
-            <div class="coin" data-value="100" data-currency="dollar">$1</div>
-        </div>
-        <div class="money-avb-title" id="current-money">Money available:</div>
-        <button class="submit-btn" id="submit-btn" data-isItemAvailable="false" disabled>Get your money and selected item</button>
-    </div>
+    <div id="item-container"></div>
+    <div id="coin-container" class="operations-container"></div>
+    <div class="operations-container" id="operations-container"></div>
 </div>
 </body>
 <script src="app.ts" type="module"></script>
