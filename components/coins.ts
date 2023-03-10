@@ -1,22 +1,8 @@
-import Component from "../lib/component";
+export default class Coins {
+  element: HTMLElement;
 
-export default class Coins extends Component {
   constructor() {
-      super({
-          element: document.getElementById("coin-container")
-      })
-  }
-
-  addCoin(coin) {
-      const submitBtn = document.getElementById("submit-btn");
-      const currentMoney = document.getElementById("current-money");
-      const isItemAvailable = submitBtn.getAttribute("data-isItemAvailable");
-      const textContent = super.addCoin(coin, isItemAvailable);
-      if (textContent) {
-          (submitBtn as HTMLButtonElement).disabled = false
-          currentMoney.textContent = textContent;
-      }
-      return null;
+      this.element = document.getElementById("coin-container")
   }
 
     render() {
@@ -32,11 +18,5 @@ export default class Coins extends Component {
        </div>
       `;
       this.element.innerHTML = innerHtml;
-
-      Array.from(document.getElementsByClassName("coin")).forEach((coin) => {
-          coin.addEventListener("click", () => {
-              this.addCoin(coin);
-          });
-      })
   }
 };
